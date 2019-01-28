@@ -17,11 +17,14 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+	//Initial inc
 	Inc16(in=RegOut, out=IncOut);
-	
+	//if reset
 	Mux16(a=RegOut, b=IncOut, sel=inc, out=MuxOut1);
+	//else if load
 	Mux16(a=MuxOut1, b=in, sel=load, out=MuxOut2);
+	//else if inc
 	Mux16(a=MuxOut2, b=false, sel=reset, out=MuxOut3);
-	
+	//else out
 	Register(in=MuxOut3, load=true, out=out, out=RegOut);
 }
