@@ -7,3 +7,30 @@
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
 // Put your code here.
+
+	@sum 
+	M=0
+	@R1
+	D=M
+	@counter //RAM[0]
+	M=D
+
+(LOOP)
+	@counter
+	D=M
+	@END
+	D;JEQ // If count is 0 -> goto END
+	@R0
+	D=M
+	@sum
+	M=M+D
+	@counter
+	M=M-1
+	@LOOP
+	0;JMP // Loop over again
+
+(END)
+	@sum
+	D=M
+	@R2
+	M=D //After all loops done, write sum to RAM[2]
