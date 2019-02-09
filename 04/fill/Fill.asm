@@ -19,7 +19,7 @@
 	@WHTSCREEN // white loop if spec met
 	D;JEQ      // jump to white if key entry == 0
 	@24575	   // screens last pxl
-	D=M        // screens last pxl set to D
+	deinc=M        // screens last pxl set to D
 	@WHTSCREEN // white loop if spec met
 	D;JLT      // jump to white loop if last pxl filled
 	@i         // register i

@@ -9,7 +9,7 @@
 // Put your code here.
 
 	@sum 
-	M=0
+	M=0      //sum = 0
 	@R1
 	D=M
 	@counter //RAM[0]
@@ -19,18 +19,18 @@
 	@counter
 	D=M
 	@END
-	D;JEQ // If count is 0 -> goto END
+	D;JEQ    // If count is 0 -> goto END
 	@R0
 	D=M
 	@sum
-	M=M+D
+	M=M+D    // adding sum to prev. sum
 	@counter
-	M=M-1
+	M=M-1    // deincrementing counter
 	@LOOP
-	0;JMP // Loop over again
+	0;JMP    // Loop over again
 
 (END)
 	@sum
-	D=M
+	D=M      // final sum amount
 	@R2
-	M=D //After all loops done, write sum to RAM[2]
+	M=D      // after all loops done, write sum to RAM[2]
