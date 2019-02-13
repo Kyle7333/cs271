@@ -40,26 +40,31 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
-        //Instructions
-    Not(in=instruction[15], out=AInstruction);
-    Not(in=AInstruction, out= CInstruction);
 
-    Or(a=Ainstruction, b=ALUa, out=ALoad);
+        //Instructions
+    Not(in=instruction[15], out=Ainstruction);
+    Not(in=Ainstruction, out=Cinstruction);
+
+    And(a=Cinstruction, b=instruction[5], out=ALUA);
+    Mux16(a=instruction, b=ALUOut, sel=ALUA, out=INRegA);
+
+    Or(a=Ainstruction, b=ALUA, out=ALoad);
     ARegister(in=INRegA, load=ALoad, out=OutA);
 
     Mux16(a=OutA, b=inM, sel=instruction[12], out=OutAM);
 
-    And(a=Cinsttuction, b=instruction[4], out=DLoad);
+    And(a=Cinstruction, b=instruction[4], out=DLoad);
     DRegister(in=ALUOut, load=DLoad, out=OutD);
 
-    ALU(x=OutD, y=OutAM, xz=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUOut, zr=OutZR, ng=OutNG);
+        //ALU
+    ALU(x=OutD, y=OutAM, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUOut, zr=OutZR, ng=OutNG);
 
-        //Memory Stuff
+        //Memory
     Or16(a=false, b=OutA, out[0..14]=addressM);
-    Or16(a=false, b=ALUOut, out=OutM);
-    And(a=Cinstruction, b=instruction[3], out=WriteM);
+    Or16(a=false, b=ALUOut, out=outM);
+    And(a=Cinstruction, b=instruction[3], out=writeM);
 
-        //PC Stuff & Jumps
+        //Jumps
     And(a=OutZR, b=instruction[1], out=jeq);
     And(a=OutNG, b=instruction[2], out=jlt);
     Or(a=OutZR, b=OutNG, out=ZorNeg);
@@ -67,11 +72,11 @@ CHIP CPU {
     And(a=pos, b=instruction[0], out=jgt);
     Or(a=jeq, b=jlt, out=jle);
     Or(a=jle, b=jgt, out=JumpA);
-    And(a=Cinstructions, b=JumpA, out=PCload);
+
+        //PC 
+    And(a=Cinstruction, b=JumpA, out=PCload);
     Not(in=PCload, out=PCinc);
     PC(in=OutA, inc=PCinc, load=PCload, reset=reset, out[0..14]=pc);
-
-
 
 
 }
