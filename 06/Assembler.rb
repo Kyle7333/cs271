@@ -1,9 +1,9 @@
 #Assembler
 
-load 'Path_Finder.rb'
-load 'ParserMod.rb'
-load 'CodeMod.rb'
-load 'SymbolTable.rb'
+require_relative "SymbolTableMod"
+require_relative "Path_Finder"
+require_relative "CodeMod"
+require_relative "ParserMod"
 
 
 class Assembler
@@ -24,16 +24,15 @@ class Assembler
 	def analyze(input) # Makes the first pass through and collects all of the symbols
 		rom_ad = 0
 		symbol_table = SymbolTable.new
-		parser = parser.new(input) # Creates a new parser object with the file input
+		parser = Parser.new(input) # Creates a new parser object with the file input
 		while parser.hasMoreCommands # Checks to see if the input has any more commands in it
 			parser.advance # advances to the next line
 
 			case parser.commandType # Checks the command type (A,C,L)
-			when A_COMMAND, C_COMMAND # When A or C commands, add add one to ROM MEMORY
-				rom_ad += 1
-
-			when L_COMMAND # If L_COMMAND, addit to the symbol_table and mark its address
-				symbol_table.addEntry(parser.symbol, rom_ad) 
+				when A_COMMAND, C_COMMAND # When A or C commands, add add one to ROM MEMORY
+					rom_ad += 1
+				when L_COMMAND # If L_COMMAND, addit to the symbol_table and mark its address
+					symbol_table.addEntry(parser.symbol, rom_ad)
 			end
 		end
 		symbol_table # Returns symbol_table
@@ -45,28 +44,28 @@ class Assembler
 		parser = Parser.new(input)
 
 		while parser hasMoreCommands # If there are more commands continue
+
 			parser.advance
 
 			case parser.commandType
-			when A_COMMAND # When a command
-				if parser.constant?
-					address = parser.symbol.to_i # Turns to int
+				when A_COMMAND # When a command
+					if parser.constant?
+						address = parser.symbol.to_i # Turns to int
 			
-				elsif symbol_table.contains?(parser.symbol) # Check if already in table
-					address = symbol_table.address(parser.symbol)
+					elsif symbol_table.contains?(parser.symbol) # Check if already in table
+						address = symbol_table.address(parser.symbol)
 
-				else 
-					address = next_avail_ram # Takes next avail ram and adds it to table
-					symbol_table.addEntry(parser.symbol, address)
-					next_avail_ram += 1
-				end
-			output.puts "%016b" % address # puts in .hack file
-
-			when C_COMMAND # Obtains all portions of the c command
-				comp = code.comp(parser.comp)
-				dest = code.dest(parser.dest)
-				jump = code.jump(parser.jump)
-				output.puts "111#{comp}#{dest}#{jump}" # Puts them in .hack file
+					else 
+						address = next_avail_ram # Takes next avail ram and adds it to table
+						symbol_table.addEntry(parser.symbol, address)
+						next_avail_ram += 1
+					end
+					output.puts "%016b" % address # puts in .hack file
+				when C_COMMAND # Obtains all portions of the c command
+					comp = code.comp(parser.comp)
+					dest = code.dest(parser.dest)
+					jump = code.jump(parser.jump)
+					output.puts "111#{comp}#{dest}#{jump}" # Puts them in .hack file
 			end
 		end
 	end

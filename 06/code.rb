@@ -45,17 +45,17 @@ class Code
 		"M"   => "001",
 		"D"   => "010",
 		"AD"  => "110",
-			"DA"  => "110",
+		"DA"  => "110",
 		"AM"  => "101",
-			"MA"  => "101",
+		"MA"  => "101",
 		"MD"  => "011",
-			"DM"  => "011",
+		"DM"  => "011",
 		"ADM" => "111",
-			"AMD" => "111",
-			"DAM" => "111",
-			"DMA" => "111",
-			"MAD" => "111",
-			"MDA" => "111"
+		"AMD" => "111",
+		"DAM" => "111",
+		"DMA" => "111",
+		"MAD" => "111",
+		"MDA" => "111"
 	}
 
 	JUMP = {
@@ -79,9 +79,4 @@ class Code
 	def jump(mneum)
 		JUMP[mneum] || "000" # Translate the Jump to binary. If doesn't exist use "000"
 	end
-
-
-
-
-
-
+end
