@@ -6,21 +6,22 @@ require_relative 'parser'
 class Assembler
 
 	def initialize(input_path)
-		input = File.open(input_path, "r+") # Read/write the input
-		output_p = input_path.gsub(/.asm/, ".hack") # Copying and changing .asm to .hack
-		output = File.open(output_p, "w") # writing the output(.hack) file
+		@input = File.open(input_path, "r+") # Read/write the input
+		output_path = input_path.gsub(/.asm/, ".hack") # Copying and changing .asm to .hack
+		@output = File.open(output_path, "w") # writing the output(.hack) file
+		@symbol_table = SymbolTable.new
+	end
 
-		symbol_table = analyze(input) # First Pass and placing them in the symbol_table
-		input.rewind	#Going back to beginning
-		create(input, output, symbol_table)
-
-		input.close
-		output.close
+	def assemble!
+		# symbol_table = analyze(@input) # First Pass and placing them in the symbol_table
+		# @input.rewind	#Going back to beginning
+		create(@input, @output, @symbol_table)
+		@input.close
+		@output.close
 	end
 
 	def analyze(input) # Makes the first pass through and collects all of the symbols
 		rom_ad = 0
-		symbol_table = SymbolTable.new
 		parser = Parser.new(input) # Creates a new parser object with the file input
 		while parser.hasMoreCommands # Checks to see if the input has any more commands in it
 			parser.advance # advances to the next line
@@ -29,10 +30,9 @@ class Assembler
 				when A_COMMAND, C_COMMAND # When A or C commands, add add one to ROM MEMORY
 					rom_ad += 1
 				when L_COMMAND # If L_COMMAND, addit to the symbol_table and mark its address
-					symbol_table.addEntry(parser.symbol, rom_ad)
+					@symbol_table.addEntry(parser.symbol, rom_ad)
 			end
 		end
-		symbol_table # Returns symbol_table
 	end
 
 	def create(input, output, symbol_table) # Makes the second pass through and translates all of the symbols into binary. Placing them into the .hack file
@@ -40,10 +40,8 @@ class Assembler
 		code = Code.new # Code object
 		parser = Parser.new(input)
 
-		while parser hasMoreCommands # If there are more commands continue
-
+		while parser.hasMoreCommands # If there are more commands continue
 			parser.advance
-
 			case parser.commandType
 				when A_COMMAND # When a command
 					if parser.constant?
@@ -71,7 +69,8 @@ end
 
 input_path = ARGV[0]
 if File.exist?(input_path) 
-	Assembler.new(input_path) # if it is then create a new .hack file to write in.
+	a = Assembler.new(input_path) # if it is then create a new .hack file to write in.
+	a.assemble!
 else
 	puts "File Does Not Exits"
 end

@@ -65,7 +65,7 @@ class Parser
 
 	def comp 
 		if commandType == C_COMMAND
-			if line.include?(';') and ('=')
+			if line.include?(';') && line.include?('=')
 				lnSplit = line.split('=', ';') # Split the string at the '=' and ';' and place them in array
 			else
 				lnSplit = line.split('=') # should always have '='
