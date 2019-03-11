@@ -1,10 +1,7 @@
 #Assembler
-
 require_relative 'symbol_table'
-require_relative 'path_finder'
 require_relative 'code'
 require_relative 'parser'
-
 
 class Assembler
 
@@ -69,4 +66,12 @@ class Assembler
 			end
 		end
 	end
+end
+
+
+input_path = ARGV[0]
+if File.exist?(input_path) 
+	Assembler.new(input_path) # if it is then create a new .hack file to write in.
+else
+	puts "File Does Not Exits"
 end
