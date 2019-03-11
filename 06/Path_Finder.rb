@@ -1,6 +1,6 @@
 # Path_Finder
 # Checks to see if the path is valid before running the rest of the prog.
-require_relative "Assembler"
+require_relative 'assembler'
 
 input_path = ARGV[0]
 if File.exist?(input_path) 

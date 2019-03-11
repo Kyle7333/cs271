@@ -1,5 +1,5 @@
 #Parser
-require_relative "CodeMod"
+require_relative 'code'
 
 class Parser
 	def initialize(input)

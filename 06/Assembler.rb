@@ -1,9 +1,9 @@
 #Assembler
 
-require_relative "SymbolTableMod"
-require_relative "Path_Finder"
-require_relative "CodeMod"
-require_relative "ParserMod"
+require_relative 'symbol_table'
+require_relative 'path_finder'
+require_relative 'code'
+require_relative 'parser'
 
 
 class Assembler
