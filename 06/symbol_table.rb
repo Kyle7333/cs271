@@ -1,7 +1,7 @@
 #Symbol Table
 
 class SymbolTable
-	USED_SYMBOLS = {
+	@used_symbols = {
 		"SP"     => 0x0000,
 		"LCL"    => 0x0001,
 		"ARG"    => 0x0002,
@@ -28,19 +28,19 @@ class SymbolTable
 	}
 
 	def initialize # Creates an empty hash table
-		@hashTable = {}
+		#@hashTable = {}
 	end
 
 	def addEntry(symbol, address) # Adds a new symbol to the table
 		fail "Symbol already in use" if contains(symbol)
-		@hashTable[symbol] = address
+		#@hashTable[symbol] = address
 	end
 
 	def contains(symbol) # Checks to see if the symbol is already in use
-		address(symbol) != nil
+		#getAddress(symbol) != nil
 	end
 
 	def getAddress(symbol) 
-		USED_SYMBOLS[symbol] || @hash_table[symbol]
+		#@used_symbols[symbol] || @hashTable[symbol]
 	end
 end
