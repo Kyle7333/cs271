@@ -68,29 +68,46 @@ class Parser
 
 	def dest
 		if commandType == C_COMMAND
-			lnSplit = @line.split('=') # Split the string at the '=' and place them in array
-			return lnSplit[0] # Grabs the item in the first position. Should be the dest command. LnSplit = ['dest', 'comp;jump']
+			if @line.include?('=')
+				lnSplit = @line.split('=') # Split the string at the '=' and place them in array
+				return lnSplit[0] # Grabs the item in the first position. Should be the dest command. LnSplit = ['dest', 'comp;jump']
+			else
+				if @line.include?(';')
+					lnSplit = @line.split(';')
+					return lnSplit[0]
+			end
 		end
 			 
 	end
 
 	def comp 
 		if commandType == C_COMMAND
-			if @line.include?(';') && @line.include?('=')
-				lnSplit = @line.split('=', ';') # Split the string at the '=' and ';' and place them in array
-			else
-				lnSplit = @line.split('=') # should always have '='
+			if @line.include?('=') && @line.include?(';') # D = C ; j
+				lnSplit = @line.split('=', ';')
+				return lnSplit[1]
+				else 
+					if @line.include?('=') # D = C
+						lnSplit = @line.split('=')
+						return lnSplit[1]
+					else 
+						return "0" # No comp command
+					end
+				end
 			end
-			return lnSplit[1] # Grabs the item in the second position. Should be the comp command. LnSplit = ['dest', 'comp', 'jump']
 		end
 	end
 
 	def jump
 		if commandType == C_COMMAND
-			if @line.include?(';') # doesnt always need a jump command. Checking to see if it is there.
-				lnSplit = @line.split('=', ';') # Split the string at the '=' and ';' and place them in array
-				return lnSplit[2] # Grabs the item in the third position. Should be the jump command. LnSplit = ['dest', 'comp', 'jump']
-			end
+			if @line.include?('=') && @line.include?(';')
+				lnSplit = @line.split('=', ';')
+				return lnSplit[2]
+				else
+					if @line.include?(';') # doesnt always need a jump command. Checking to see if it is there.
+						lnSplit = @line.split(';') # Split the string at the '=' and ';' and place them in array
+						return lnSplit[1] # Grabs the item in the third position. Should be the jump command. LnSplit = ['dest', 'comp', 'jump']
+					end
+				end
 		end
 	end
 end
